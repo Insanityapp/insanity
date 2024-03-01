@@ -1,9 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const corsOptions = {
+  origin: ["http://localhost:3000", "https://insanity-app.vercel.app"],
+  // Adicione todas as origens permitidas acima
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Conexão com o MongoDB Atlas
@@ -48,7 +55,7 @@ app.post("/adicionarItem", async (req, res) => {
     res.status(201).json({ mensagem: "Item adicionado com sucesso!" });
   } catch (error) {
     console.error("Erro ao adicionar item:", error);
-    res.status(500).send("Erro interno do servidor");
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 });
 
