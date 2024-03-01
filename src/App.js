@@ -4,6 +4,7 @@ import "./App.css";
 
 function App() {
   const [itens, setItens] = useState([]);
+  const [novoItem, setNovoItem] = useState("");
 
   useEffect(() => {
     // Fazendo a solicitação GET para o servidor
@@ -12,6 +13,31 @@ function App() {
       .then((data) => setItens(data))
       .catch((error) => console.error("Erro ao buscar dados:", error));
   }, []); // O array vazio assegura que a solicitação seja feita apenas uma vez após a montagem do componente
+
+  const adicionarItem = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/adicionarItem", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nome: novoItem }),
+      });
+
+      if (response.ok) {
+        console.log("Item adicionado com sucesso!");
+        // Atualiza a lista de itens após adicionar um novo
+        fetch("http://localhost:5000/itens")
+          .then((response) => response.json())
+          .then((data) => setItens(data))
+          .catch((error) => console.error("Erro ao buscar dados:", error));
+      } else {
+        console.error("Erro ao adicionar item:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Erro ao adicionar item:", error);
+    }
+  };
 
   return (
     <div className="App">
@@ -23,6 +49,15 @@ function App() {
             <li key={item._id}>{item.nome}</li>
           ))}
         </ul>
+        <div>
+          <input
+            type="text"
+            placeholder="Novo Item"
+            value={novoItem}
+            onChange={(e) => setNovoItem(e.target.value)}
+          />
+          <button onClick={adicionarItem}>Adicionar</button>
+        </div>
         <a
           className="App-link"
           href="https://reactjs.org"

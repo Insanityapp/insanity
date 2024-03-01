@@ -37,6 +37,24 @@ app.get("/itens", async (req, res) => {
   }
 });
 
+// Rota para adicionar um novo item
+app.post("/adicionarItem", async (req, res) => {
+  const { nome } = req.body;
+
+  if (!nome) {
+    return res.status(400).json({ mensagem: "Nome do item é obrigatório." });
+  }
+
+  try {
+    const newItem = new Item({ nome });
+    await newItem.save();
+    res.status(201).json({ mensagem: "Item adicionado com sucesso!" });
+  } catch (error) {
+    console.error("Erro ao adicionar item:", error);
+    res.status(500).send("Erro interno do servidor");
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
