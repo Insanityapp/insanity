@@ -8,7 +8,7 @@ function App() {
 
   useEffect(() => {
     // Fazendo a solicitação GET para o servidor
-    fetch("http://localhost:5000/itens")
+    fetch("https://insanity-app.vercel.app/itens")
       .then((response) => response.json())
       .then((data) => setItens(data))
       .catch((error) => console.error("Erro ao buscar dados:", error));
@@ -16,18 +16,21 @@ function App() {
 
   const adicionarItem = async () => {
     try {
-      const response = await fetch("http://localhost:5000/adicionarItem", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ nome: novoItem }),
-      });
+      const response = await fetch(
+        "https://insanity-app.vercel.app/adicionarItem",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ nome: novoItem }),
+        }
+      );
 
       if (response.ok) {
         console.log("Item adicionado com sucesso!");
         // Atualiza a lista de itens após adicionar um novo
-        fetch("http://localhost:5000/itens")
+        fetch("https://insanity-app.vercel.app/itens")
           .then((response) => response.json())
           .then((data) => setItens(data))
           .catch((error) => console.error("Erro ao buscar dados:", error));
