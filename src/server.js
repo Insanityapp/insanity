@@ -33,7 +33,7 @@ app.get("/itens", async (req, res) => {
     res.json(itens);
   } catch (error) {
     console.error("Erro ao buscar itens:", error);
-    res.status(500).send("Erro interno do servidor");
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 });
 
